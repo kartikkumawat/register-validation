@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Include Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --sidebar-width: 250px;
+            --sidebar-collapsed-width: 70px;
+            --navbar-height: 60px;
+            --primary-color: #4e73df;
+            --secondary-color: #f8f9fc;
+        }
+        
+        body {
+            background-color: var(--secondary-color);
+            font-family: Arial, sans-serif;
+        }
+        
+        .register-card {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .register-card h3 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+        }
+
+        .register-card .form-control {
+            padding-left: 40px;
+        }
+
+        .register-card .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .register-card .form-group .other-icon {
+            position: absolute;
+            left: 15px;
+            top: 13px;
+            color: var(--primary-color);
+        }
+
+        .register-card button {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .register-card button:hover {
+            background-color: #3e5bd9;
+        }
+
+        .register-card button:disabled {
+            background-color: #c0c0c0;
+            cursor: not-allowed;
+        }
+
+        .register-card button .loader {
+            border: 3px solid #f3f3f3; /* Light gray */
+            border-top: 3px solid #fff; /* White color */
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            visibility: hidden;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hide the eye button if browser shows the password field button */
+        .eye-icon {
+            position: absolute;
+            right: 15px;
+            top: 13px;
+            cursor: pointer;
+            color: #bbb;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="register-card">
+        <h3>Create an Account</h3>
+        <form id="register-form">
+            <div class="form-group">
+                <i class="fa fa-user other-icon"></i>
+                <input type="text" class="form-control" id="full-name" placeholder="Full Name" required>
+            </div>
+            <div class="form-group">
+                <i class="fa fa-envelope other-icon"></i>
+                <input type="email" class="form-control" id="email" placeholder="Email Address" required>
+            </div>
+            <div class="form-group">
+                <i class="fa fa-user other-icon"></i>
+                <input type="text" class="form-control" id="username" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <i class="fa fa-lock other-icon"></i>
+                <input type="password" class="form-control" id="password" placeholder="Password" required>
+                <i class="fa fa-eye eye-icon" id="toggle-password"></i>
+            </div>
+            <div class="form-group">
+                <i class="fa fa-lock other-icon"></i>
+                <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password" required>
+                <i class="fa fa-eye eye-icon" id="toggle-confirm-password"></i>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" id="register-button">
+                    Register
+                    <div class="loader"></div>
+                </button>
+            </div>
+        </form>
+        <div class="login-link">
+            <p>Already have an account? <a href="login.html">Login here</a></p>
+        </div>
+    </div>
+</div>
+
+<!-- Include Bootstrap JS Bundle -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Toggle password visibility for password fields
+    const togglePassword = document.getElementById("toggle-password");
+    const passwordField = document.getElementById("password");
+
+    const toggleConfirmPassword = document.getElementById("toggle-confirm-password");
+    const confirmPasswordField = document.getElementById("confirm-password");
+
+    function toggleFieldVisibility(passwordInput, toggleIcon) {
+        const type = passwordInput.type === "password" ? "text" : "password";
+        passwordInput.type = type;
+
+        if (type === "password") {
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+        } else {
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+        }
+    }
+
+    // Show/Hide password when eye icon is clicked
+    togglePassword.addEventListener("click", () => {
+        toggleFieldVisibility(passwordField, togglePassword);
+    });
+
+    toggleConfirmPassword.addEventListener("click", () => {
+        toggleFieldVisibility(confirmPasswordField, toggleConfirmPassword);
+    });
+
+    // Hide the eye icon if the browser's show password option is visible
+    window.addEventListener("DOMContentLoaded", () => {
+        const passwordField = document.getElementById("password");
+        passwordField.addEventListener("focus", function() {
+            setTimeout(function() {
+                const inputType = passwordField.getAttribute('type');
+                if (inputType === 'password') {
+                    togglePassword.style.display = 'block';
+                } else {
+                    togglePassword.style.display = 'none';
+                }
+            }, 200); // Ensure the browser’s default button doesn’t show first
+        });
+
+        passwordField.addEventListener("blur", function() {
+            setTimeout(function() {
+                togglePassword.style.display = 'block'; // Make sure the icon is back when the focus is out
+            }, 200);
+        });
+    });
+
+     // Form validation and loader display logic
+     document.getElementById("register-form").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        // Get form field values
+        const fullName = document.getElementById("full-name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirm-password").value;
+
+        // Simple form validation
+        if (fullName === "" || email === "" || username === "" || password === "" || confirmPassword === "") {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        // Check if passwords match
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        // Basic email validation
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!emailPattern.test(email)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+
+        // Show the loader and disable the register button
+        const loader = document.querySelector(".loader");
+        const registerButton = document.getElementById("register-button");
+        loader.style.visibility = "visible";
+        registerButton.disabled = true;
+
+        // Simulate a request (Replace with actual AJAX/Fetch request to the server)
+        setTimeout(function() {
+            // Hide the loader and enable the register button again after 3 seconds (simulating request completion)
+            loader.style.visibility = "hidden";
+            registerButton.disabled = false;
+            alert("Registration successful!"); // This should be replaced with a success message or redirect
+        }, 3000); // Simulate a 3-second delay for the request
+    });
+
+</script>
+
+</body>
+</html>
